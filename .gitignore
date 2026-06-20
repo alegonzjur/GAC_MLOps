@@ -1,1 +1,3 @@
-ECHO est  activado.
+# Mlflow
+mlruns/
+mlflow.db
