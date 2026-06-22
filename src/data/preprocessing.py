@@ -46,14 +46,24 @@ def load_raw_data(path: str) -> pd.DataFrame:
     return df
 
 
-def encode_categoricals(df: pd.DataFrame) -> pd.DataFrame:
-    """Codifica género, género de juego y nivel de estrés con LabelEncoder."""
+def encode_categoricals(df: pd.DataFrame, return_encoders: bool = False):
     df = df.copy()
-    le = LabelEncoder()
 
-    df['gender_enc'] = le.fit_transform(df['gender'])
-    df['gaming_genre_enc'] = le.fit_transform(df['gaming_genre'])
-    df['stress_level_enc'] = le.fit_transform(df['stress_level'])
+    le_gender = LabelEncoder()
+    le_genre = LabelEncoder()
+    le_stress = LabelEncoder()
+
+    df['gender_enc'] = le_gender.fit_transform(df['gender'].astype(str))
+    df['gaming_genre_enc'] = le_genre.fit_transform(df['gaming_genre'].astype(str))
+    df['stress_level_enc'] = le_stress.fit_transform(df['stress_level'].astype(str))
+
+    if return_encoders:
+        encoders = {
+            'gender': le_gender,
+            'gaming_genre': le_genre,
+            'stress_level': le_stress,
+        }
+        return df, encoders
 
     return df
 

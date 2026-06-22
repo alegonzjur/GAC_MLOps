@@ -11,7 +11,10 @@ dependencies:
   - matplotlib
   - seaborn
   - jupyter
+  - dvc
   - pip
   - pip:
       - mlflow
       - pytest
+      - fastapi
+      - uvicorn
