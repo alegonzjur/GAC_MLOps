@@ -1,6 +1,6 @@
 # GAC_MLOps
 
-Proyecto de portfolio que aplica un ciclo de vida de ML completo y reproducible sobre el proyecto base [**GamingAcademicPerformance**](https://github.com/alegonzjur/GamingAcademicPerformance), que analiza el impacto del gaming en el rendimiento académico de 8.000 estudiantes.
+Proyecto que aplica un ciclo de vida de ML completo y reproducible sobre el proyecto base [**GamingAcademicPerformance**](https://github.com/alegonzjur/GamingAcademicPerformance), que analiza el impacto del gaming en el rendimiento académico de 8.000 estudiantes.
  
 El objetivo no es solo entrenar modelos, sino demostrar ingeniería de ML aplicada: estructura modular, tracking de experimentos, tests unitarios, versionado de datos y despliegue en contenedor.
  
