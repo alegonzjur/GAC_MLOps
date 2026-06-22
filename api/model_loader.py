@@ -1,46 +1,46 @@
 """
-Carga de modelos y encoders desde MLflow.
+Carga de modelos y encoders desde disco (archivos serializados).
 
-Separado de main.py para que la lógica de "conectar con MLflow y
-cargar artefactos" no esté mezclada con la lógica de "servir endpoints".
+En producción (Docker) los modelos viven en models/, exportados
+previamente desde MLflow con scripts/export_models.py.
+Esto desacopla la API del tracking server de MLflow.
 """
 
 import os
 import pickle
-import mlflow.sklearn
-import mlflow.xgboost
+import joblib
 
-TRACKING_URI = "sqlite:///mlflow.db"
+MODELS_DIR = os.path.join(os.path.dirname(__file__), "..", "models")
 
 
-def load_model_and_encoder(run_id: str, flavor: str = "sklearn"):
+def load_model_and_encoder(model_filename: str, encoder_filename: str):
     """
-    Carga el modelo y el encoder del run especificado.
+    Carga un modelo y su encoder desde disco.
 
     Args:
-        run_id: ID del run de MLflow.
-        flavor: 'sklearn' para Random Forest, 'xgboost' para XGBClassifier.
+        model_filename: nombre del archivo .pkl del modelo en models/.
+        encoder_filename: nombre del archivo .pkl del encoder en models/.
+
+    Returns:
+        model: modelo entrenado listo para predict().
+        encoders: diccionario de LabelEncoders ajustados en entrenamiento.
     """
-    mlflow.set_tracking_uri(TRACKING_URI)
+    model_path = os.path.join(MODELS_DIR, model_filename)
+    encoder_path = os.path.join(MODELS_DIR, encoder_filename)
 
-    model_uri = f"runs:/{run_id}/model"
+    model = joblib.load(model_path)
 
-    if flavor == "xgboost":
-        model = mlflow.xgboost.load_model(model_uri)
-    else:
-        model = mlflow.sklearn.load_model(model_uri)
-
-    client = mlflow.tracking.MlflowClient()
-    encoder_path = client.download_artifacts(run_id, "encoder")
-
-    pkl_file = [f for f in os.listdir(encoder_path) if f.endswith(".pkl")][0]
-    with open(os.path.join(encoder_path, pkl_file), "rb") as f:
+    with open(encoder_path, "rb") as f:
         encoders = pickle.load(f)
 
     return model, encoders
 
 
 def build_feature_vector(data: dict, encoders: dict) -> list:
+    """
+    Convierte el input crudo de la API en el vector numérico
+    que esperan los modelos, aplicando los encoders del entrenamiento.
+    """
     return [[
         data['age'],
         data['gaming_hours'],

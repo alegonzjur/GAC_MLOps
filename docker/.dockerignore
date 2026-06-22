@@ -1,0 +1,26 @@
+# Entornos
+.conda/
+__pycache__/
+*.pyc
+*.pyo
+
+# MLflow (no necesario en producción)
+mlruns/
+mlflow.db
+
+# Datos (los modelos ya están serializados en models/)
+data/
+
+# Desarrollo
+notebooks/
+tests/
+.git/
+.dvc/
+
+# Scripts de utilidad
+scripts/
+
+# Otros
+*.md
+.gitignore
+.dvcignore
