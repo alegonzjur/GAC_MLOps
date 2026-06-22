@@ -27,8 +27,8 @@ El objetivo no es solo entrenar modelos, sino demostrar ingeniería de ML aplica
 GAC_MLOps/
 ├── data/
 │   ├── raw/              # Dataset original de Kaggle (versionado con DVC)
-│   └── processed/        # Dataset limpio generado por el pipeline (DVC)
-│
+│   ├── processed/        # Dataset limpio generado por el pipeline (DVC)
+│   └── img/              # Imágenes del proyecto
 ├── src/
 │   ├── data/
 │   │   ├── cleaning.py       # Limpieza de datos y feature engineering
